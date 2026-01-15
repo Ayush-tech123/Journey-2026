@@ -15,6 +15,7 @@ int main(){
     
     if(t == NULL){
         printf("Memory Allocation Failed");
+        return 1;
     }
 
     for(int i = 0; i < 3; i++){
@@ -59,7 +60,7 @@ int main(){
     }
 
     while(fgets(c , 200 , f) != NULL){
-         printf("%s\n", c);
+         printf("%s", c);
     }
 
     fclose(f);
