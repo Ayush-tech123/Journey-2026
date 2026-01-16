@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include <string.h>
+
 
 struct Teacher{
     int id;
@@ -27,23 +29,30 @@ int main(){
 
         switch(choice) {
             case 1:
-                printf("Add Teacher selected\n");
-                
-                records = realloc(records , (count + 1) * sizeof(struct Teacher));
+            records = realloc(records, (count + 1) * sizeof(struct Teacher));
 
-                if(records == NULL){
-                    printf("Memory Allocation Failed");
-                    return 1;
-                }
-                printf("Entry No. %d\n", count + 1);
-                printf("\nEnter Id : ");
-                scanf("%d", &records[count].id);
-                printf("\nEnter Name : ");
-                scanf("%29s", records[count].name);
-                printf("\nEnter Salary : ");
-                scanf("%d", &records[count].salary);
-                count++;
-                break;
+             if(records == NULL){
+             printf("Memory Allocation Failed");
+             return 1;
+             }
+
+             printf("Entry No. %d\n", count + 1);
+
+             printf("Enter Id: ");
+             scanf("%d", &records[count].id);
+
+             getchar(); 
+
+             printf("Enter Full Name: ");
+             fgets(records[count].name, 30, stdin);
+             records[count].name[strcspn(records[count].name, "\n")] = '\0';
+
+             printf("Enter Salary: ");
+             scanf("%d", &records[count].salary);
+
+              count++;
+              break;
+
             case 2:
                 printf("View All selected\n");
                 if(count == 0){
@@ -88,13 +97,99 @@ int main(){
             }
             break;
 
-                break;
+                
             case 4:
                 printf("Edit selected\n");
+
+            if(count == 0){
+                printf("No Record Stored");
                 break;
+            }
+
+            int searchID;
+            char confirm;
+            int entry = 0;
+
+            printf("Enter Id to Edit: ");
+            scanf("%d", &searchID);
+            for(int i = 0; i < count; i++){
+                if(records[i].id == searchID){
+                    printf("Record found\n");
+                    printf("ID : %d\n", records[i].id);
+                    printf("Name : %s\n", records[i].name);
+                    printf("Salary : %d\n", records[i].salary); 
+                    printf("Is this the Record you want to edit (Y/N)\n");
+                    getchar();
+                    scanf("%c", &confirm);
+
+                    if(confirm == 'Y' || confirm == 'y'){
+
+                        printf("Give the new Entry\n");
+                        printf("Enter ID : ");
+                        scanf("%d", &records[i].id);
+                        getchar(); 
+
+                        printf("Enter Full Name: ");
+                        fgets(records[i].name, 30, stdin);
+                        records[i].name[strcspn(records[i].name, "\n")] = '\0';
+                        printf("\nEnter Salary : ");
+                        scanf("%d", &records[i].salary);
+                        printf("\nEntry Stored\n");
+                        entry = 1;
+                        break;
+                    }
+                    else{
+                        continue;
+                    }
+                }
+                
+                
+            }
+           
+            if(!entry){
+            printf("No Record Found\n");
+            break;
+                }                
+            break;
             case 5:
+
                 printf("Delete selected\n");
+
+                int SearchId;
+                char Delete;
+                int missing = 0;
+                printf("Enter Id to delete: ");
+                scanf("%d", &SearchId);
+
+                for(int i = 0; i < count; i++){
+                if(records[i].id == SearchId){
+                    printf("Record found\n");
+                    printf("ID : %d\n", records[i].id);
+                    printf("Name : %s\n", records[i].name);
+                    printf("Salary : %d\n", records[i].salary); 
+                    printf("Is this the Record you want to delete (Y/N)\n");
+                    getchar();
+                    scanf("%c", &Delete);
+                    if(Delete == 'Y' || Delete == 'y'){
+                        for(int j = i; j < count - 1; j++){
+                            records[j] = records[j + 1];
+                        }
+                        count--;
+                        records = realloc(records, count * sizeof(struct Teacher));
+                        printf("Record Deleted Succesfully");
+                        break;
+                        missing = 1;
+                    }
+                    else{
+                        continue;
+                    }    
+                }
+            }
+            if(!missing){
+                printf("No record found");
                 break;
+            }
+            break;
             case 6:
                 printf("Exiting...\n");
                 return 0;
