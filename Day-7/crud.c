@@ -152,6 +152,11 @@ int main(){
                 }                
             break;
             case 5:
+                  
+                if(count == 0){
+                    printf("No record to delete");
+                    break;
+                }
 
                 printf("Delete selected\n");
 
@@ -176,9 +181,16 @@ int main(){
                         }
                         count--;
                         records = realloc(records, count * sizeof(struct Teacher));
-                        printf("Record Deleted Succesfully");
-                        break;
+                        
+                        if(records == NULL){
+                            printf("Memory Allocation Failed");
+                            return 1;
+                        }
+                        
+                        printf("Record Deleted Succesfully\n");
+
                         missing = 1;
+                        break;
                     }
                     else{
                         continue;
@@ -192,6 +204,7 @@ int main(){
             break;
             case 6:
                 printf("Exiting...\n");
+                free(records);
                 return 0;
             default:
                 printf("Invalid choice\n");
