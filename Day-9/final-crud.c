@@ -13,11 +13,14 @@ void viewTeachers(struct Teacher *records, int count);
 void searchTeacher(struct Teacher *records, int count);
 void editTeacher(struct Teacher *records, int count);
 void deleteTeacher(struct Teacher **records, int *count);
+void saveToFile(struct Teacher *records, int count);
+void loadFromFile(struct Teacher **records, int *count);
 
 int main(){
     struct Teacher *records = NULL;
     int count = 0;
     int choice;
+    loadFromFile(&records, &count);
 
     while(1){
         printf("\n--- Teacher Record System ---\n");
@@ -30,7 +33,7 @@ int main(){
             case 3: searchTeacher(records, count); break;
             case 4: editTeacher(records, count); break;
             case 5: deleteTeacher(&records, &count); break;
-            case 6: free(records); return 0;
+            case 6: saveToFile(records, count);free(records); return 0;
             default: printf("Invalid choice\n");
         }
     }
@@ -154,4 +157,46 @@ void deleteTeacher(struct Teacher **records, int *count){
     if(!found) printf("Not found\n");
 }
 
+void saveToFile(struct Teacher *records, int count){
+    FILE *f = fopen("teachers.txt", "w");
 
+    if(f == NULL){
+        printf("File open failed\n");
+        return;
+    }
+
+    for(int i = 0; i < count; i++){
+        fprintf(f, "%d\n", records[i].id);
+        fprintf(f, "%s\n", records[i].name);
+        fprintf(f, "%d\n", records[i].salary);
+    }
+
+    fclose(f);
+    printf("Data saved successfully\n");
+}
+
+void loadFromFile(struct Teacher **records, int *count){
+    FILE *f = fopen("teachers.txt", "r");
+
+    if(f == NULL){
+        return; // No file yet (first run)
+    }
+
+    struct Teacher temp;
+    *count = 0;
+
+    while(
+        fscanf(f, "%d\n", &temp.id) == 1 &&
+        fgets(temp.name, 30, f) &&
+        fscanf(f, "%d\n", &temp.salary) == 1
+    ){
+        temp.name[strcspn(temp.name, "\n")] = '\0';
+
+        *records = realloc(*records, (*count + 1) * sizeof(struct Teacher));
+        (*records)[*count] = temp;
+        (*count)++;
+    }
+
+    fclose(f);
+    printf("Data loaded successfully\n");
+}
