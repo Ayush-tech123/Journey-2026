@@ -1,0 +1,10 @@
+name = input("Enter your name : ")
+age = int(input("Enter your age : "))
+city = input("Enter your city : ")
+college = input("Enter your collge : ")
+
+print("Name:", name)
+print("Age:", age)
+print("City:", city)
+print("college: ", college)
+print("In five years you will be ", age + 5)
