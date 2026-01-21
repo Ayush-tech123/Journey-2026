@@ -1,0 +1,4 @@
+Ayush,19,Ujjain
+Ashish,17,Dhodhar
+Prakhar,18,Kanpur
+Aayush,20,Indore
