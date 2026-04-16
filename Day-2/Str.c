@@ -5,7 +5,7 @@ int main() {
     char *s2 = "hello";
 
     s1[0] = 'H';
-    s2[0] = 'H';   // This line is dangerous
+//  s2[0] = 'H';   // This line is dangerous
 
     printf("s1 = %s\n", s1);
     printf("s2 = %s\n", s2);
